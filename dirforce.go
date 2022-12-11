@@ -29,26 +29,34 @@ func main() {
 	status_code := resp.StatusCode
 	fmt.Println("[*]", RHOST, ":", status_code)
 
-	Wordlist()
+
 }
 
-// wordlist
+// Retreving Wordlist 
 func Wordlist() {
 	fmt.Println("[*] Parshing Wordlist...")
 
-	file, err := os.Open("common.txt")
+	file, err := os.Open("wordlist/all.txt")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
-	// Scanner := bufio.NewScanner(file)
-	// Scanner.Split(bufio.ScanWords)
+	// Word Counter
+	fileScanner := bufio.NewScanner(file)
+	fileScanner.Split(bufio.ScanWords)
 
-	// for Scanner.Scan() {
-	// 	fmt.Println(Scanner.Text())
-	// }
-	// if err := Scanner.Err(); err != nil {
-	// 	log.Fatal(err)
-	// }
+	// initiate counter
+	count := 0
+	// for looping through results
+	for fileScanner.Scan() {
+		count++
+	}
+	// print total word count
+	fmt.Printf("[*] Total Paths to Check: '%d'", count)
+
+	// check if there was an error while reading words from file
+	if err := fileScanner.Err(); err != nil {
+		panic(err)
+	}
 
 }
