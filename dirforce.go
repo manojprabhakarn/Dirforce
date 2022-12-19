@@ -29,53 +29,53 @@ func main() {
 	status_code := resp.StatusCode
 	fmt.Println("[*]", RHOST, ":", status_code)
 
-	wordlist(Wordlist)
-	checkpath(RHOST)
+	wordlist(Wordlist, RHOST)
+	// checkpath(RHOST)
 
-	// scanning
-	fmt.Println("\n [*] Beginning scan... \n")
-	for i in 
-}
+	// // scanning
+	// for i := 0; i < 4; i++{
+	// 	fmt.Printf("GeeksforGeeks\n")
+	// 	}
 }
 
 // Retreving Wordlist
-func wordlist(Wordlist string) {
+func wordlist(Wordlist, RHOST string) {
 	fmt.Println("[*] Parshing Wordlist...")
 
 	file, err := os.Open(Wordlist)
 	if err != nil {
-		panic(err)
-	}
-	// Word Counter
-	fileScanner := bufio.NewScanner(file)
-	fileScanner.Split(bufio.ScanWords)
-
-	// initiate counter
-	count := 0
-	// for looping through results
-	for fileScanner.Scan() {
-		count++
-	}
-	// print total word count
-	// fmt.Printf("[*] Total Paths to Check: '%d'", count)
-
-	// check if there was an error while reading words from file
-	if err := fileScanner.Err(); err != nil {
-		panic(err)
-	}
-	return count
-}
-
-func checkpath(RHOST, path string) {
-	url := RHOST + "/" + path
-	resp, err := http.Get(url)
-	if err != nil {
 		log.Fatal(err)
-		fmt.Println("[*] Error: An UnExpected Error Occured")
 	}
-	if resp.StatusCode == 200{
-		fmt.Println("[*] Valid Path Found:",path)
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+		url := RHOST + "/" + scanner.Text()
+		resp, err := http.Get(url)
+		if err != nil {
+			log.Fatal(err)
+			fmt.Println("[*] Error: An UnExpected Error Occured")
+		}
+		status_code := resp.StatusCode
+		fmt.Println("[*]", url, ":", status_code)
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
 	}
 
 }
 
+// func checkpath(RHOST, path string) {
+// 	url := RHOST + "/" + path
+// 	resp, err := http.Get(url)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 		fmt.Println("[*] Error: An UnExpected Error Occured")
+// 	}
+// 	if resp.StatusCode == 200{
+// 		fmt.Println("[*] Valid Path Found:",path)
+// 	}
+
+// }
