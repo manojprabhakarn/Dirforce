@@ -15,7 +15,7 @@ func main() {
 	var wordlist string
 
 	flag.StringVar(&baseURL, "rhost", "default", "Enter the target URL")
-	flag.StringVar(&wordlist, "wordlist", "", "the file to include")
+	flag.StringVar(&wordlist, "wordlist", "", "Enter your wordlist")
 	// Parse the command-line arguments
 	flag.Parse()
 
@@ -38,11 +38,10 @@ func main() {
 		directories = append(directories, scanner.Text())
 	}
 
-
 	// Try each directory
 	for _, dir := range directories {
 		// Construct the full URL for the directory
-		url := baseURL +"/"+ dir
+		url := baseURL + "/" + dir
 
 		// Make an HTTP GET request to the URL
 		resp, err := http.Get(url)
@@ -60,5 +59,20 @@ func main() {
 			// The directory was not foundS
 			fmt.Println(url + " was not found")
 		}
+	}
+
+	// ---------------------------------------------help Section--------------------------------------------
+	help := flag.Bool("help", false, "show usage information")
+
+	// Parse the command-line arguments
+	flag.Parse()
+
+	// Check the value of the flag
+	if *help {
+		// The "help" flag was provided, so print usage information
+		fmt.Println("Usage: program [options]")
+		fmt.Println("Options:")
+		flag.PrintDefaults()
+		return
 	}
 }
